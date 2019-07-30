@@ -103,7 +103,8 @@ class Ui_MainWindow(object):
         self.thread.start()
         self.query_btn.setEnabled(False)
 
-    def add(self, pinyin, name):  # 为combobox添加项目及设置数据集合将城市与对应的拼音对应(与get_city.add_city_name信号绑定)
+    # 为combobox添加项目及设置数据集合将城市与对应的拼音对应(与get_city.add_city_name信号绑定)
+    def add(self, pinyin, name):
         self.comboBox.addItem(name)
         self.city[name] = pinyin
 
