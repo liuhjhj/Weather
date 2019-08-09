@@ -9,6 +9,8 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtWidgets import QDesktopWidget
+
 import Get_City
 import re
 import html_parser
@@ -87,7 +89,14 @@ class Ui_MainWindow(object):
         self.query_btn.clicked.connect(self.query_weather)
         self.retranslateUi(MainWindow)
         self.exit_btn.clicked.connect(MainWindow.close)
+        self.center()
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def center(self):
+        screen = QDesktopWidget().screenGeometry()
+        size = MainWindow.geometry()
+        MainWindow.move((screen.width() - size.width()) / 2,
+                           (screen.height() - size.height()) / 2)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
