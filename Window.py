@@ -5,7 +5,7 @@
 # Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
-
+import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -71,7 +71,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.choos_city_label)
         self.comboBox = QtWidgets.QComboBox(MainWindow)
         self.comboBox.setObjectName("comboBox")
-        self.comboBox.currentTextChanged.connect(self.show_infor)
+        self.comboBox.currentIndexChanged.connect(self.show_infor)
         self.horizontalLayout.addWidget(self.comboBox)
         self.query_btn = QtWidgets.QPushButton(MainWindow)
         self.query_btn.setObjectName("query_btn")
@@ -98,6 +98,7 @@ class Ui_MainWindow(object):
         self.comboBox.addItem('请选择城市')
 
     def query_weather(self):  # 获取城市列表(与按钮绑定)
+        self.comboBox.setEditable(True)
         self.thread = get_city()
         self.thread.add_city_name.connect(self.add)
         self.thread.start()
@@ -111,10 +112,13 @@ class Ui_MainWindow(object):
     def show_infor(self):  # 显示天气信息(与combobox绑定)
         if self.comboBox.currentText() != '请选择城市':
             self.weather_infor_listWidget.clear()
-            self.show_thread = get_weather(
-                self.city[self.comboBox.currentText()])
-            self.show_thread.weather_signal.connect(self.add_infor)
-            self.show_thread.start()
+            if self.comboBox.currentText() not in self.city:
+                self.weather_infor_listWidget.addItem('城市名输入有误!')
+            else:
+                self.show_thread = get_weather(
+                    self.city[self.comboBox.currentText()])
+                self.show_thread.weather_signal.connect(self.add_infor)
+                self.show_thread.start()
 
     def add_infor(self, weather_data):  # 添加天气条目(与get_weather.weather_signal绑定)
         if self.comboBox.currentText() != '请选择城市':
